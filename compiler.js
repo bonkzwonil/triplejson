@@ -1,52 +1,57 @@
 var _= require('underscore');
+
 // https://www.npmjs.com/package/mpath
-var mpath = require('mpath');
+// Despite it's more powerful query language, mpath doesn't support
+// setters where a path-part is missing in the target,
+// e.g. set('target.NotExist.color', 'Red')
+// See also mocha tests 
+//var mpath = require('mpath');
 
-
-var clone = function(obj){
-    return JSON.parse(JSON.stringify(obj));
-}
+// https://www.npmjs.com/package/dotty
+var dotty = require('dotty');
 
 var runCommand = function(code, root){
     var command  = _.first(_.keys(code));
-    opcodes[command](code[_.keys(code)[0]], root);
-}
+    opcodes[command](code[command], root);
+};
 
 var opcodes = {
     /*
-     "$copy": {"from": "source", "to": "target"}
-     "$copy": {"value": "Mondia Media", "to": "target.vendor"}
+     "$copy": {"from": "PATH", "to": "PATH"}
+     "$copy": {"value": "CONSTANT", "to": "PATH"}
      */
     $copy: function(options, root){
         if(options.value){
-            mpath.set(options.to, options.value, root);
+            dotty.put(root, options.to, options.value);
         }else{
-            mpath.set(options.to, _.clone(mpath.get(options.from, root)), root);
+            dotty.put(root, options.to, _.clone(dotty.get(root, options.from)));
         }
     },
     /*
-     "$delete": "dimension"
-     "$delete": "dimension.width"
+     "$delete": "PATH"
      */
     $delete: function(options, root){
         delete root[options];
     },
+    /*
+     "$move": {"from": "PATH", "to": "PATH"}
+     */
     $move: function(options, root){
         this["$copy"](options, root);
         this["$delete"](options.from, root);
     },
     /*
      "$map": {
-         "from": "sourceArray", 
-         "to": "targetArray", 
+         "from": "PATH", // Points to an array 
+         "to": "PATH", 
          "do": [
-             {"$move": {"from": "FROM", "to": "TO"}},
-             {"$delete": "FIELD"}
+             {"$move": {"from": "PATH", "to": "PATH"}},
+             {"$delete": "PATH"} // Path relative to current object
          ]}}
      */
     $map: function(options, root) {
         var doables = options["do"];
-        var result = _.map(mpath.get(options.from, root), function(element){
+        var result = _.map( dotty.get(root, options.from), function(element){
             _.each(doables, function(doable){
                 runCommand(doable, element);
             });
@@ -55,16 +60,17 @@ var opcodes = {
         root[options.to] = result;
     },
     /*
-      "$copyOne": { "from": "colorCodes", "to": "colors.colorRed", "filter": { "name": "RED" }}
+      "$copyOne": { "from": "PATH", "to": "PATH", "filter": { "field": "value" }}
      */
     $copyOne: function(options, root) {
-        var element = _.findWhere(mpath.get(options.from, root), options.filter);
+        var element = _.findWhere( dotty.get(root, options.from), options.filter);
         if (element != undefined) {
             this["$copy"]({value: element, to: options.to}, root);
         }
     },
     /*
      "$comment": "My comment"
+     "$comment": { .... }
      */
     $comment: function(options, root) {
         // Do nothing

@@ -8,8 +8,8 @@
  {"$copy": {"value": "DUMMY", "to": "target.vendor.dummy"}},
  {"$delete": "target.vendor.dummy"},
 
- {"$comment": "Hack to get around problem with mpath setter 'colors.colorRed', ... Needs to be analyzed. "},
- {"$copy": {"value": {}, "to": "colors"}},
+ {"$comment": "Hack to get around problem with mpath setter 'colors.colorRed',..."},
+ {"$comment": {"$copy": {"value": {}, "to": "colors"}}},
  {"$copyOne": { "from": "colorCodes", "to": "colors.colorRed", "filter": { "name": "RED" } } },
  {"$copyOne": { "from": "colorCodes", "to": "colors.colorGreen", "filter": { "name": "GREEN" } } },
  {"$copyOne": { "from": "colorCodes", "to": "colors.colorBlue", "filter": { "name": "BLUE" } } }

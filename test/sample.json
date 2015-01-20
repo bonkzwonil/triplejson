@@ -1,3 +1,6 @@
 [{"$copy": {"from": "source", "to": "target"}},
- {"$delete": "source"}
+ {"$delete": "source"},
+ {"$map": {"from": "mappable", "to": "mapped", "do": [
+     {"$copy": {"from": "von", "to": "nach"}}
+ ]}}
 ]

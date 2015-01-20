@@ -1,2 +1,4 @@
 # triplejson
-Triple JSON is a small mini language in JSON, which transforms JSON to JSON
+Triple JSON is a small mini language in JSON, to transform JSON to JSON
+
+

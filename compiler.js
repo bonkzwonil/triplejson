@@ -1,5 +1,4 @@
 var _= require('underscore');
-//var async = require('async');
 
 
 var clone = function(obj){
@@ -21,6 +20,10 @@ var opcodes = {
     },
     $delete: function(options, root){
         delete root[options];
+    },
+    $move: function(options, root){
+        this["$copy"](options, root);
+        this["$delete"](options.from, root);
     },
     $map: function(options, root) {
         var doables = options["do"];
@@ -49,13 +52,4 @@ var compile = function(code){
 };
 
 
-
-var testcode = require('./test/sample.json');
-
-var compiled = compile(testcode);
-
-console.log(compiled({source: {wert: "hallo"},
-                      mappable: [{von: "hier"},
-                                 {von: "hier auch"}]}));
-
-
+module.exports = compile;

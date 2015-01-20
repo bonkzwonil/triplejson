@@ -1,13 +1,13 @@
 {
-  "name": "twiddle-dsl",
+  "name": "triplejson",
   "version": "1.0.0",
   "description": "Json to Json Twiddle Language",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
-  "author": "",
-  "license": "ISC",
+  "author": "Mathias Menzel-Nielsen",
+  "license": "BSD",
   "dependencies": {
     "expect": "^1.4.0",
     "mpath": "^0.2.1",

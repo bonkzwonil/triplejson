@@ -1,0 +1,3 @@
+[{"$copy": {"from": "source", "to": "target"}},
+ {"$delete": "source"}
+]

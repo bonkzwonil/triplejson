@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "expect": "^1.4.0",
+    "mpath": "^0.2.1",
     "underscore": "^1.7.0"
   }
 }

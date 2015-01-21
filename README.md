@@ -28,9 +28,11 @@ This Example copies the "here" property of the object in the "sub" property of t
 
 
 So that: 
+
     {sub: {here: [{id: 1, junk: "crap"},{id:2, junk: "garbage"}]}}
 
 becomes:
+
     {sub: {here: [{id: 1, junk: "crap"},{id:2, junk: "garbage"}]}
      there: [{id:1},{id:2}]}
      

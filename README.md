@@ -21,7 +21,19 @@ So:
     
 is the simpliest Hello World, which just puts the constant string "hello" into rootObject.world.
 
-This Example copies the "here" property of the object in the "sub" property of the root object to the "there" property, mapping it on the fly, so that all "junk" properties get deleted:
+This Example copies the "here" property of the object in the "sub" property of the root object (an array) to the "there" property, mapping it on the fly, so that all "junk" properties get deleted:
 
-    [{"$map": {"from": "here", "to": "there", "do":[
+    [{"$map": {"from": "sub.here", "to": "there", "do":[
         {"$delete": "junk"}]}]
+
+
+So that: 
+    {sub: {here: [{id: 1, junk: "crap"},{id:2, junk: "garbage"}]}}
+
+becomes:
+    {sub: {here: [{id: 1, junk: "crap"},{id:2, junk: "garbage"}]}
+     there: [{id:1},{id:2}]}
+     
+
+
+
